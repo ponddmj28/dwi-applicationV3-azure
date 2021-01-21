@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: dwi-wa
+  name: dwi-wa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: dwi-wa
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: dwi-wa
+    spec:
+      containers:
+      - env:
+         - name: DWI_WS_URL
+           valueFrom:
+             configMapKeyRef:
+                key: DWI_WS_URL
+                name: dwiwa-cfgmap
+         - name: IMAGE_STORE_PATH
+           valueFrom:
+             configMapKeyRef:
+                key: IMAGE_STORE_PATH
+                name: dwiwa-cfgmap
+#        - name: DWI_WS_URL
+#          value: http://dwi-ws:8100
+#        - name: IMAGE_STORE_PATH
+#          value: /temp/images/imagesUpload
+        image: tosaporn/dwi-frontend:0.0.1-SNAPSHOT
+        name: dwi-wa
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /temp/images/imagesUpload
+          name: image-dwi
+      restartPolicy: Always
+      volumes:
+      - name: image-dwi
+        persistentVolumeClaim:
+          claimName: image-dwi
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: dwi-wa
+  name: dwi-wa
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    io.kompose.service: dwi-wa
+  sessionAffinity: None #CHANGE
+  type: LoadBalancer

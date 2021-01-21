@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: dwi-bt
+  name: dwi-bt
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: dwi-bt
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: dwi-bt
+    spec:
+      containers:
+      - env:
+         - name: DB_HOSTNAME
+           valueFrom:
+              configMapKeyRef:
+                key: DB_HOSTNAME
+                name: dwiws-cfgmap
+         - name: DB_NAME
+           valueFrom:
+              configMapKeyRef:
+                key: DB_NAME
+                name: dwiws-cfgmap
+         - name: DB_PASSWORD
+           valueFrom:
+              configMapKeyRef:
+                key: DB_PASSWORD
+                name: dwiws-cfgmap
+         - name: DB_PORT
+           valueFrom:
+              configMapKeyRef:
+                key: DB_PORT
+                name: dwiws-cfgmap
+         - name: DB_USERNAME
+           valueFrom:
+              configMapKeyRef:
+                key: DB_USERNAME
+                name: dwiws-cfgmap  
+         - name: DWI_WS_URL
+           valueFrom:
+             configMapKeyRef:
+                key: DWI_WS_URL
+                name: dwiwa-cfgmap-2
+         - name: TMP_OUTPUT_PATH
+           value: /tmp/batch/files
+         - name: SMPL_SCHD_VL
+           value: 0 0 0/1 * * ?
+        image: tosaporn/dwi-batch:0.0.4-SNAPSHOT
+        name: dwi-bt
+        volumeMounts:
+        - mountPath: /tmp/batch/files
+          name: tmp-output-bt
+        readinessProbe:
+          httpGet:
+            path: /dwi-bt/isAlive
+            port: 8200
+          failureThreshold: 5
+          periodSeconds: 10
+          initialDelaySeconds: 60
+        livenessProbe:
+          httpGet:
+            path: /dwi-bt/isAlive
+            port: 8200
+          failureThreshold: 5
+          periodSeconds: 10
+          initialDelaySeconds: 60
+      restartPolicy: Always
+      volumes:
+      - name: tmp-output-bt
+        persistentVolumeClaim:
+          claimName: tmp-output-bt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: dwi-bt
+  name: dwi-bt
+spec:
+  ports:
+  - port: 8200
+    protocol: TCP
+    targetPort: 8200
+  selector:
+    io.kompose.service: dwi-bt
+  sessionAffinity: None 
+  type: NodePort

@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dwi-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /dwi-wa/*
+        backend:
+          serviceName: dwi-wa
+          servicePort: 8080
+      - path: /dwi-ws/*
+        backend:
+          serviceName: dwi-ws
+          servicePort: 8100
+      - path: /dwi-bt/*
+        backend:
+          serviceName: dwi-bt
+          servicePort: 8200

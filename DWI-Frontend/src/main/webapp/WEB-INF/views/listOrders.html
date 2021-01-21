@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html class="no-js css-menubar" lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    
+    <title>Listing Orders</title>
+    <div th:replace="fragments/template :: header-css"> </div>
+    
+    <!--[if lt IE 9]>
+    <script src="../../../global/vendor/html5shiv/html5shiv.min.js"></script>
+    <![endif]-->
+    
+    <!--[if lt IE 10]>
+    <script src="../../../global/vendor/media-match/media.match.min.js"></script>
+    <script src="../../../global/vendor/respond/respond.min.js"></script>
+    <![endif]-->
+    
+    <!-- Scripts -->
+     <script th:src="@{/resources/global/vendor/breakpoints/breakpoints.js}"></script>
+    <script>
+      Breakpoints();
+    </script>
+  </head>
+  <body class="animsition site-navbar-small ">
+     <div th:replace="fragments/template :: header"> </div>
+
+    <!-- Page -->
+    <div class="page">
+      <!-- <div class="page-header">
+        <h1 class="page-title">Apply Order for Sales</h1>
+       </div> -->
+      
+      <div class="page-content container-fluid">
+	       <div class="row">
+	       	  <div class="col-md-12">	
+	       	  		
+        <!-- Panel Table Tools -->
+			       <div class="panel">
+			         <header class="panel-heading">
+			           <h3 class="panel-title">List Orders</h3>
+			         </header>
+			         <div class="panel-body">
+			         				<form method="GET" class="form-horizontal fv-form fv-form-bootstrap4" id="exampleStandardForm">
+				         				<div class="form-group row">
+				         					<div class="col-md-12">
+							                  <h4 class="example-title">Create Date</h4>
+							                    <div class="input-daterange" data-plugin="datepicker">
+							                      <div class="input-group">
+							                        <span class="input-group-addon">
+							                          <i class="icon wb-calendar" aria-hidden="true"></i>
+							                        </span>
+							                        <input type="text" class="form-control" name="startDate" />
+							                      </div>
+							                      <div class="input-group">
+							                        <span class="input-group-addon">to</span>
+							                        <input type="text" class="form-control" name="endDate" />
+							                      </div>
+							                    </div>
+							                 </div>
+						                  </div>
+						                  
+						                  <div class="form-group row">
+				         					<div class="col-md-12">
+				         					 <h4 class="example-title">Status</h4>
+							                  <div class="example example-wrap">
+							                    <select data-plugin="selectpicker" name="status">
+							                       <option value="">ALL STATUS</option>
+			                      				   <option th:each="st : ${sts}" th:value="${st.statusCd}" th:text="${st.statusDesc}"/>
+							                    </select>
+							                  </div>
+							                 </div>
+						                  </div>
+						                  
+						                  <div class="form-group row">
+				         					<div class="col-md-12">
+				         					 <h4 class="example-title">Sales</h4>
+							                  <div class="example example-wrap">
+							                    <select data-plugin="selectpicker" name="sales">
+							                      <option value="">ALL USERS</option>
+			                      				   <option th:each="user : ${users}" th:value="${user.username}" th:text="|${user.firstName}  ${user.lastName}|"/>
+							                    </select>
+							                  </div>
+							                  <div class="text-right">
+							                  	<button type="reset" class="btn btn-default" id="resetButton">Reset</button>
+							                    <button type="submit" class="btn btn-primary" id="validateButton" th:disabled="(*{jobId} != null) ? 'true' : 'false'">Submit</button>
+							                  </div>
+							                 </div>
+						                  </div>
+			         				</form>
+			         				<div class="row col-md-12">
+							            <table class="table table-hover dataTable table-striped w-full" id="exampleTableTools">
+							              <thead>
+							                <tr>
+							                  <th>Job Id</th>
+							                  <th>Customer Name</th>
+							                  <th>Package</th>
+							                  <th>Register Date</th>
+							                  <th>Installed Date</th>
+							                  <th>Circuit Id</th>
+							                  <th>Status</th>
+							                  <th>Detail</th>
+							                </tr>
+							              </thead>
+							              <tbody>
+							              	<tr th:each="wk : ${wks}">
+							              		<td th:text="${wk.jobId}"></td>
+							              		<td th:text="|${wk.firstName} ${wk.lastName}|"></td>
+							              		<td th:text="${wk.targetPackage}"></td>
+							              		<td th:text="${wk.createdDate}"></td>
+							              		<td th:text="${wk.dueDateInstall}"></td>
+							              		<td th:text="${wk.circuitNo}"></td>
+							              		<td th:text="${wk.statusCd}"></td>
+							              		<td>
+							              			<a th:href="@{|orderDetail/${wk.jobId}|}" class="btn btn-round btn-info btn-sm">detail</a>
+							              			<a th:if="${#authentication.principal.roleCode} != 'SALES'" th:href="@{|updatedOrder/${wk.jobId}|}" class="btn btn-round btn-warning btn-sm">updated</a>
+							              			<a th:if="${#authentication.principal.roleCode} != 'SALES'" th:href="@{|rejectOrClosed/${wk.jobId}|}" class="btn btn-round btn-success btn-sm">Reject/Close</a>
+							              		</td>
+							              	</tr>
+							              </tbody>
+							            </table>
+					            	</div>
+					 </div>
+				  </div>
+			        <!-- End Panel Table Tools -->
+	       	  </div>
+	       </div>
+      </div>
+    </div>
+    <!-- End Page -->
+
+
+    <!-- Footer -->
+     <div th:replace="fragments/template :: footer-js"> </div>
+     
+    <script>
+      (function(document, window, $){
+        'use strict';
+    
+        var Site = window.Site;
+        $(document).ready(function(){
+          Site.run();
+        });
+      })(document, window, jQuery);
+    </script>
+    
+  </body>
+</html>

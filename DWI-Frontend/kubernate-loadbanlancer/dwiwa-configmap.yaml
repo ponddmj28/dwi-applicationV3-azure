@@ -1,0 +1,12 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    DWI_WS_URL: http://dwi-ws:8100
+    IMAGE_STORE_PATH: /temp/images/imagesUpload
+  kind: ConfigMap
+  metadata:
+    name: dwiwa-cfgmap
+    namespace: default
+kind: List
+

@@ -1,0 +1,481 @@
+
+<!DOCTYPE html>
+<html class="no-js css-menubar" lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    
+    <title>Apply Order</title>
+    <div th:replace="fragments/template :: header-css"> </div>
+    
+    <!--[if lt IE 9]>
+    <script src="../../../global/vendor/html5shiv/html5shiv.min.js"></script>
+    <![endif]-->
+    
+    <!--[if lt IE 10]>
+    <script src="../../../global/vendor/media-match/media.match.min.js"></script>
+    <script src="../../../global/vendor/respond/respond.min.js"></script>
+    <![endif]-->
+    
+    <!-- Scripts -->
+     <script th:src="@{/resources/global/vendor/breakpoints/breakpoints.js}"></script>
+    <script>
+      Breakpoints();
+    </script>
+  </head>
+  <body class="animsition site-navbar-small ">
+     <div th:replace="fragments/template :: header"> </div>
+
+    <!-- Page -->
+    <div class="page">
+      <!-- <div class="page-header">
+        <h1 class="page-title">Apply Order for Sales</h1>
+       </div> -->
+      
+      <div class="page-content container-fluid">
+	       <div class="row">
+	       	  <div class="col-md-12">	
+	       		<div class="panel">
+	              <div class="panel-heading">
+		                
+	              </div>
+	              <div class="panel-body">
+	              	<div class="row">
+				            <div class="col-lg-12">
+				              <!-- Example Default -->
+				              <div class="example-wrap">
+				              	<BR></BR>
+				              	<th:block th:switch="${PAGE}">
+				              		<h4 class="example-title" th:case="'ORDER'">Submit Order</h4>
+				              		<h4 class="example-title" th:case="'PREVIEW'" >Confirm Order</h4>
+				              		<h4 class="example-title" th:case="'SUMMARY'" >Summary Order</h4>
+				              		<h4 class="example-title" th:case="'UPDATED'" >Updated Order</h4>
+				              		<h4 class="example-title" th:case="'CLOSED'" >Closed Order</h4>
+				              	</th:block>
+				              		<form th:if="${PAGE} == 'CLOSED'" th:action="(${PAGE} == 'CLOSED') ? @{/rejectOrClosed(${_csrf.parameterName}=${_csrf.token})} : '' " method="POST" class="form-horizontal fv-form fv-form-bootstrap4" id="exampleStandardForm3" enctype='multipart/form-data' th:object="${updateObj}" autocomplete="off">
+				              			<div class="form-group row">
+						                    <label class="col-md-3 form-control-label"> Circuit No </label>
+						                    <div class="col-md-3">
+						                      <input type="text" class="form-control" name="standard_circuitNo" data-fv-field="standard_circuitNo" th:field="*{circuitNo}" th:disabled="true" />
+						                    </div>
+						                    
+						                    <label class="col-md-2 form-control-label"> วันนัดติดตั้ง </label>
+					                  	  	<div class="col-md-3 input-group">
+						                      <span class="input-group-addon">
+						                        <i class="icon wb-calendar" aria-hidden="true"></i>
+						                      </span>
+						                      <input type="text" class="form-control" data-plugin="datepicker" th:field="*{duedateInstallTmp}" th:disabled="(*{status} != 'CLOSED') ? false : true" />
+						                    </div>
+						                    
+						                 </div>
+					                     <div class="form-group row">
+						                  	  <label class="col-md-3 form-control-label"></label>
+								               <div class="checkbox-custom checkbox-primary col-md-3">
+								                    <input type="checkbox" th:checked=" (*{isItInAreaTmp} ) ? 'true':'false' " th:field="*{isItInAreaTmp}"  th:disabled="(*{status} != 'CLOSED') ? false : true" />
+								                    <label for="inputChecked"> ในพื้นที่กรุงเทพและปฎิมณฑล </label>
+								               </div>
+					                  	  </div>
+					                  	  
+					                  	  <div class="form-group row">
+				         					<div class="col-md-12">
+				         					 	<label class="col-md-3 form-control-label"> Status </label>
+							                    <select class="col-md-3" data-plugin="selectpicker" th:field="*{status}" th:disabled="(*{circuitNo} == null) ? 'true' : 'false'" >
+							                       <option value="">ALL STATUS</option>
+			                      				   <option th:each="st : ${sts}" th:value="${st.statusCd}" th:text="${st.statusDesc}" th:if="(${st.statusCd} == 'REJECTED' or ${st.statusCd} == 'CLOSED')" />
+							                    </select>
+							                 </div>
+						                  </div>
+						                  
+					                  	  <input type="hidden" th:field="*{jobId}" />
+					                  	  <div class="text-center" th:if="*{status} == 'UPDATED'">
+						                  	<button type="reset" class="btn btn-default" id="resetButton">Reset</button>
+						                    <button type="button" class="btn btn-primary" id="validate3Button" th:disabled="(*{circuitNo} == null) ? 'true' : 'false'" data-target="#exampleModalWarning3" data-toggle="modal">Submit</button>
+						                  </div>
+					                  	  <hr class="mb-10 mt-20" />
+				              		</form>
+				              		
+				              		<form th:if="${PAGE} == 'UPDATED'" th:action="(${PAGE} == 'UPDATED') ? @{/updatedOrder(${_csrf.parameterName}=${_csrf.token})} : '' " method="POST" class="form-horizontal fv-form fv-form-bootstrap4" id="exampleStandardForm2" enctype='multipart/form-data' th:object="${updateObj}" autocomplete="off">
+				              			<div class="form-group row">
+						                    <label class="col-md-3 form-control-label"> Circuit No </label>
+						                    <div class="col-md-3" th:if="${PAGE} == 'UPDATED'">
+						                      <input type="text" class="form-control" name="standard_circuitNo" data-fv-field="standard_circuitNo" th:field="*{circuitNo}" th:disabled="(*{circuitNo} != null) ? 'true' : 'false'" />
+						                    </div>
+						                    
+						                    <label class="col-md-2 form-control-label"> วันนัดติดตั้ง </label>
+					                  	  	<div class="col-md-3 input-group">
+						                      <span class="input-group-addon">
+						                        <i class="icon wb-calendar" aria-hidden="true"></i>
+						                      </span>
+						                      <input type="text" class="form-control" data-plugin="datepicker" th:field="*{duedateInstallTmp}" th:disabled="(*{circuitNo} != null) ? 'true' : 'false'" />
+						                    </div>
+						                    
+						                 </div>
+					                     <div class="form-group row">
+						                  	  <label class="col-md-3 form-control-label"></label>
+								               <div class="checkbox-custom checkbox-primary col-md-3">
+								                    <input type="checkbox" th:checked=" (*{isItInAreaTmp} ) ? 'true':'false' " th:field="*{isItInAreaTmp}"  th:disabled="(*{circuitNo} != null) ? 'true' : 'false'" />
+								                    <label for="inputChecked"> ในพื้นที่กรุงเทพและปฎิมณฑล </label>
+								               </div>
+					                  	  </div>
+					                  	  <input type="hidden" th:field="*{jobId}" />
+					                  	  <div class="text-center">
+						                  	<button type="reset" class="btn btn-default" id="resetButton">Reset</button>
+						                    <button type="button" class="btn btn-primary" id="validate2Button" th:disabled="(*{circuitNo} != null) ? 'true' : 'false'" data-target="#exampleModalWarning2" data-toggle="modal">Submit</button>
+						                  </div>
+					                  	  <hr class="mb-10 mt-20" />
+				              		</form>
+				              		
+				                <p th:if="${PAGE} == 'ORDER' OR ${PAGE} == 'PREVIEW'">3 Steps to Apply Customer Order</p>
+				                <div class="example" th:if="${PAGE} == 'ORDER' OR ${PAGE} == 'PREVIEW'">
+				                  <div class="steps row">
+				                    <div th:class="(${PAGE} == 'ORDER') ? 'step col-lg-4 current' : 'step col-lg-4 done' ">
+				                      <span class="step-number">1</span>
+				                      <div class="step-desc">
+				                        <span class="step-title">Customer Information</span>
+				                        <p>filling in customer information</p>
+				                      </div>
+				                    </div>
+				
+				                    <div th:class="(${PAGE} != 'ORDER') ? 'step col-lg-4 current' : 'step col-lg-4' ">
+				                      <span class="step-number">2</span>
+				                      <div class="step-desc">
+				                        <span class="step-title">Confirm Information</span>
+				                        <p>double check for detail</p>
+				                      </div>
+				                    </div>
+				
+				                    <div class="step col-lg-4">
+				                      <span class="step-number">3</span>
+				                      <div class="step-desc">
+				                        <span class="step-title">Getting Request No</span>
+				                        <p>inform evidence order</p>
+				                      </div>
+				                    </div>
+				                  </div>
+				                </div>
+				                <div class="example" th:if="${PAGE} == 'SUMMARY'">
+				                  <div class="steps row">
+				                    <div class="step col-lg-4 done">
+				                      <span class="step-number">1</span>
+				                      <div class="step-desc">
+				                        <span class="step-title">Customer Information</span>
+				                        <p>filling in customer information</p>
+				                      </div>
+				                    </div>
+				
+				                    <div class="step col-lg-4 done">
+				                      <span class="step-number">2</span>
+				                      <div class="step-desc">
+				                        <span class="step-title">Confirm Information</span>
+				                        <p>double check for detail</p>
+				                      </div>
+				                    </div>
+				
+				                    <div class="step col-lg-4 current">
+				                      <span class="step-number">3</span>
+				                      <div class="step-desc">
+				                        <span class="step-title">Getting Request No</span>
+				                        <p>inform evidence order</p>
+				                      </div>
+				                    </div>
+				                  </div>
+				                </div>
+				              </div>
+				              <!-- End Example Default -->
+				         	</div>
+				     </div>
+	                <form th:action="(${PAGE} != 'ORDER') ? @{/submitOrder(${_csrf.parameterName}=${_csrf.token})} : @{/applyOrder(${_csrf.parameterName}=${_csrf.token})} " method="POST" class="form-horizontal fv-form fv-form-bootstrap4" id="exampleStandardForm" enctype='multipart/form-data' th:object="${order}" autocomplete="off">
+	                  <div class="form-group row" th:if="*{jobId} != null">
+	                    <label class="col-md-3 form-control-label">Job Id </label>
+	                    <div class="col-md-3">
+	                      <input type="text" class="form-control" name="standard_firstName" data-fv-field="standard_firstName" th:field="*{jobId}" th:disabled="true" />
+	                    </div>
+	                    <label class="col-md-1 form-control-label"> Create Date </label>
+	                    <div class="col-md-3">
+	                      <input type="text" class="form-control" name="standard_lastName" data-fv-field="standard_createDate" th:field="*{createdDate}" th:disabled="true" />
+	                    </div>
+	                  </div>
+	                  <div class="form-group row">
+	                    <label class="col-md-3 form-control-label">ชื่อจริง</label>
+	                    <div class="col-md-3" th:if="${PAGE} == 'ORDER'">
+	                      <input type="text" class="form-control" name="standard_firstName" data-fv-field="standard_firstName" th:field="*{firstName}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                    </div>
+	                    <div class="col-md-3" th:if="${PAGE} != 'ORDER'">
+	                      <input type="text" class="form-control" name="standard_firstName" data-fv-field="standard_firstName" th:value="*{firstName}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                      <input type="hidden" th:field="*{firstName}" />
+	                    </div>
+	                    <label class="col-md-1 form-control-label"> นามสกุล </label>
+	                    <div class="col-md-3" th:if="${PAGE} == 'ORDER'">
+	                      <input type="text" class="form-control" name="standard_lastName" data-fv-field="standard_lastName" th:field="*{lastName}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                    </div>
+	                    <div class="col-md-3" th:if="${PAGE} != 'ORDER'">
+	                      <input type="text" class="form-control" name="standard_lastName" data-fv-field="standard_lastName" th:value="*{lastName}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                      <input type="hidden" th:field="*{lastName}" />
+	                    </div>
+	                  </div>
+	                  <div class="form-group row">
+	                    <label class="col-md-3 form-control-label"> รหัสบัตรประชาชน </label>
+	                    <div class="col-md-4" th:if="${PAGE} == 'ORDER'">
+	                      <input type="text" class="form-control" name="standard_idcard" data-fv-field="standard_idcard" th:field="*{idCard}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                    </div>
+	                    <div class="col-md-4" th:if="${PAGE} != 'ORDER'">
+	                      <input type="text" class="form-control" name="standard_idcard" data-fv-field="standard_idcard" th:value="*{idCard}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                      <input type="hidden" th:field="*{idCard}" />
+	                    </div>
+	                  </div>
+	                  <div class="form-group row">
+	                    <label class="col-md-3 form-control-label"> เบอร์โทร 1</label>
+	                    <div class="col-md-3" th:if="${PAGE} == 'ORDER'">
+	                      <input type="text" class="form-control form-control-lg" name="standard_phone1" data-fv-field="standard_phone1" th:field="*{phoneNo1}" placeholder="XXX XXXX XXX" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                    </div>
+	                    <div class="col-md-3" th:if="${PAGE} != 'ORDER'">
+	                      <input type="text" class="form-control form-control-lg" name="standard_phone1" data-fv-field="standard_phone1" th:value="*{phoneNo1}" placeholder="XXX XXXX XXX" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                      <input type="hidden" th:field="*{phoneNo1}" />
+	                    </div>
+	                    <label class="col-md-1 form-control-label"> เบอร์โทร 2</label>
+	                    <div class="col-md-3" th:if="${PAGE} == 'ORDER'">
+	                      <input type="text" class="form-control form-control-lg" name="standard_phone2" data-fv-field="standard_phone2" th:field="*{phoneNo2}" placeholder="XXX XXXX XXX" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'"  />
+	                    </div>
+	                    <div class="col-md-3" th:if="${PAGE} != 'ORDER'">
+	                      <input type="text" class="form-control form-control-lg" name="standard_phone2" data-fv-field="standard_phone2" th:value="*{phoneNo2}" placeholder="XXX XXXX XXX" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'"  />
+	                      <input type="hidden" th:field="*{phoneNo2}" />
+	                    </div>
+	                  </div>
+	                  <div class="form-group row">
+	                    <label class="col-md-3 form-control-label"> ชื่อไลน์ลูกค้า </label>
+	                    <div class="col-md-3" th:if="${PAGE} == 'ORDER'">
+	                      <input type="text" class="form-control" name="standard_lineName" data-fv-field="standard_lineName" th:field="*{nmLine}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                    </div>
+	                    <div class="col-md-3" th:if="${PAGE} != 'ORDER'">
+	                      <input type="text" class="form-control" name="standard_lineName" data-fv-field="standard_lineName" th:value="*{nmLine}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                      <input type="hidden" th:field="*{nmLine}" />
+	                    </div>
+	                  </div>
+	                  <div class="form-group row">
+	                    <label class="col-md-3 form-control-label"> แพ็คเกจ </label>
+	                    <div class="col-md-3" th:if="${PAGE} == 'ORDER'">
+	                      <select data-plugin="selectpicker" name="standard_package" data-fv-field="standard_package" th:field="*{targetPackage}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'"  >
+			                      <option value="">Select</option>
+			                      <option th:each="pkg : ${pkgs}" th:value="${pkg.packageCd}" th:text="${pkg.packageDesc}"/>
+						  </select>
+	                     <!--  <input type="text" class="form-control" name="standard_package" data-fv-field="standard_package" th:field="*{targetPackage}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" /> -->
+	                    </div>
+	                    <div class="col-md-3" th:if="${PAGE} != 'ORDER'">
+	                      <input type="text" class="form-control" name="standard_package" data-fv-field="standard_package" th:value="*{targetPackage}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                      <input type="hidden" th:field="*{targetPackage}" />
+	                    </div>
+	                    <label class="col-md-3 form-control-label"> รายละเอียดแพ็คเกจ </label>
+	                    <div class="col-md-3" th:if="${PAGE} == 'ORDER'">
+	                      <input type="text" class="form-control" name="standard_package_desc" data-fv-field="standard_package_desc" th:field="*{targetPackageDesc}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                    </div>
+	                    <div class="col-md-3" th:if="${PAGE} != 'ORDER'">
+	                      <input type="text" class="form-control" name="standard_package_desc" data-fv-field="standard_package_desc" th:value="*{targetPackageDesc}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                      <input type="hidden" th:field="*{targetPackageDesc}" />
+	                    </div>
+	                  </div>
+	                  <div class="form-group row">
+	                    <label class="col-md-3 form-control-label"> รีมาร์ค </label>
+	                    <div class="col-md-9" th:if="${PAGE} == 'ORDER'">
+	                      <textarea class="form-control" name="standard_remark" rows="5" data-fv-field="standard_remark" th:field="*{remark}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" ></textarea>
+	                    </div>
+	                    <div class="col-md-9" th:if="${PAGE} != 'ORDER'">
+	                      <textarea class="form-control" name="standard_remark" rows="5" data-fv-field="standard_remark" th:utext="*{remark}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" ></textarea>
+	                      <input type="hidden" th:field="*{remark}" />
+	                    </div>
+	                  </div>
+	                  
+	                  <div class="form-group row">
+                  	    <label class="col-md-3 form-control-label"> วันนัดติดตั้ง </label>
+                  	  	<div class="col-md-3 input-group" th:if="${PAGE} == 'ORDER'">
+	                      <span class="input-group-addon">
+	                        <i class="icon wb-calendar" aria-hidden="true"></i>
+	                      </span>
+	                      <input type="text" class="form-control" data-plugin="datepicker" th:field="*{installDate}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                    </div>
+	                    <div class="col-md-3 input-group" th:if="${PAGE} != 'ORDER'">
+	                      <span class="input-group-addon">
+	                        <i class="icon wb-calendar" aria-hidden="true"></i>
+	                      </span>
+	                      <input type="text" class="form-control" data-plugin="datepicker" th:value="*{installDate}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+	                      <input type="hidden" th:field="*{installDate}" />
+	                    </div>
+                     </div>
+                     
+                     <div class="form-group row">
+	                  	  <label class="col-md-3 form-control-label"></label>
+		                   <div class="checkbox-custom checkbox-primary col-md-3" th:if="${PAGE} == 'ORDER'">
+			                    <input type="checkbox" th:field="*{isItInArea}"  th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+			                    <label for="inputChecked"> ในพื้นที่กรุงเทพและปฎิมณฑล </label>
+			               </div>
+			               <div class="checkbox-custom checkbox-primary col-md-3" th:if="${PAGE} != 'ORDER'">
+			                    <input type="checkbox" th:checked=" (*{isItInArea} ) ? 'true':'false' "  th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'" />
+			                    <label for="inputChecked"> ในพื้นที่กรุงเทพและปฎิมณฑล </label>
+			                    <input type="hidden" th:field="*{isItInArea}" />
+			               </div>
+                  	  </div>
+                  	  
+                     <div class="form-group row">
+	                    <label class="col-md-3 form-control-label"> ที่อยู่ที่ติดตั้ง </label>
+	                    <div class="col-md-9" th:if="${PAGE} == 'ORDER'">
+	                      <textarea class="form-control" name="standard_address" rows="5" data-fv-field="standard_address" th:field="*{customerAddress}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'"></textarea>
+	                    </div>
+	                    <div class="col-md-9" th:if="${PAGE} != 'ORDER'">
+	                      <textarea class="form-control" name="standard_address" rows="5" data-fv-field="standard_address" th:utext="*{customerAddress}" th:disabled="(${PAGE} != 'ORDER') ? 'true' : 'false'"></textarea>
+	                      <input type="hidden" th:field="*{customerAddress}" />
+	                    </div>
+	                 </div>
+	                 
+	                  <div class="form-group row" th:if="${PAGE} == 'PREVIEW'">
+	                    <label class="col-md-3 form-control-label">  </label>
+	                    <div class="col-md-3 example-wrap">
+		                  <h4 class="example-title"> Foreside ID Card </h4>
+		                  <div class="example">
+		                    <input type="file" id="input-file-now" data-plugin="dropify" data-default-file="" th:field="*{upload1}" />
+		                  </div>
+		                </div>
+		                
+		                <div class="col-md-3 example-wrap">
+		                  <h4 class="example-title"> Behide ID Card </h4>
+		                  <div class="example">
+		                    <input type="file" id="input-file-now1" data-plugin="dropify" data-default-file="" th:field="*{upload2}"/>
+		                  </div>
+		                </div>
+		                
+		                <div class="col-md-3 example-wrap">
+		                  <h4 class="example-title"> Profile Picture </h4>
+		                  <div class="example">
+		                    <input type="file" id="input-file-now2" data-plugin="dropify" data-default-file="" th:field="*{upload3}"/>
+		                  </div>
+		                </div>
+	                  </div>
+	                  
+	                  <div class="form-group row" th:if="${PAGE} == 'SUMMARY' or ${PAGE} == 'UPDATED' or ${PAGE} == 'CLOSED'">
+	                  	<label class="col-md-3 form-control-label"> </label>
+	                    <div class="col-md-3" th:if="*{pathImg1} != null">
+	                    <ul class="blocks blocks-100 blocks-xxl-4" data-plugin="filterable" data-filters="#exampleFilter" th:if="*{pathImg1} != null">
+		                  <!-- <ul class="blocks blocks-100 blocks-xxl-4 blocks-lg-3 blocks-md-2" data-plugin="filterable" data-filters="#exampleFilter" th:if="*{pathImg1} != null"> -->
+	                  		<li data-type="card">
+					            <div class="card card-shadow">
+					              <figure class="card-img-top overlay-hover overlay">
+					                <img class="overlay-figure overlay-scale" th:src="@{'/'+*{pathImg1}}" th:alt="@{'/'+*{pathImg1}}" />
+					                <figcaption class="overlay-panel overlay-background overlay-fade overlay-icon">
+					                  <a class="icon wb-search" th:href="@{'/'+*{pathImg1}}"></a>
+					                </figcaption>
+					              </figure>
+					              <div class="card-block">
+					                <h4 class="card-title">--</h4>
+					              </div>
+					            </div>
+					          </li>
+	                  	  </ul>
+		                </div>
+		                <div class="col-md-3" th:if="*{pathImg2} != null">
+		                	<ul class="blocks blocks-100 blocks-xxl-4" data-plugin="filterable" data-filters="#exampleFilter"  th:if="*{pathImg2} != null">
+		                  <!-- <ul class="blocks blocks-100 blocks-xxl-4 blocks-lg-3 blocks-md-2" data-plugin="filterable" data-filters="#exampleFilter"  th:if="*{pathImg2} != null"> -->
+	                  		<li data-type="card" >
+					            <div class="card card-shadow">
+					              <figure class="card-img-top overlay-hover overlay">
+					                <img class="overlay-figure overlay-scale" th:src="@{'/'+*{pathImg2}}" th:alt="@{'/'+*{pathImg2}}" />
+					                <figcaption class="overlay-panel overlay-background overlay-fade overlay-icon">
+					                  <a class="icon wb-search" th:href="@{'/'+*{pathImg2}}"></a>
+					                </figcaption>
+					              </figure>
+					              <div class="card-block">
+					                <h4 class="card-title">--</h4>
+					              </div>
+					            </div>
+					          </li>
+	                  	  </ul>
+		                </div>
+		                <div class="col-md-3" th:if="*{pathImg3} != null">
+		                <ul class="blocks blocks-100 blocks-xxl-4" data-plugin="filterable" data-filters="#exampleFilter"  th:if="*{pathImg3} != null">
+		                  <!-- <ul class="blocks blocks-100 blocks-xxl-4 blocks-lg-3 blocks-md-2" data-plugin="filterable" data-filters="#exampleFilter"  th:if="*{pathImg3} != null"> -->
+	                  		<li data-type="card">
+					            <div class="card card-shadow">
+					              <figure class="card-img-top overlay-hover overlay">
+					                <img class="overlay-figure overlay-scale" th:src="@{'/'+*{pathImg3}}" th:alt="@{'/'+*{pathImg3}}" />
+					                <figcaption class="overlay-panel overlay-background overlay-fade overlay-icon">
+					                  <a class="icon wb-search" th:href="@{'/'+*{pathImg3}}"></a>
+					                </figcaption>
+					              </figure>
+					              <div class="card-block">
+					                <h4 class="card-title">--</h4>
+					              </div>
+					            </div>
+					          </li>
+	                  	  </ul>
+		                </div>
+	                  </div>
+	                  <div class="text-right">
+	                  	<button type="reset" class="btn btn-default" id="resetButton">Reset</button>
+	                    <button type="submit" class="btn btn-primary" id="validateButton" th:disabled="(*{jobId} != null) ? 'true' : 'false'">Submit</button>
+	                  </div>
+	                </form>
+	              </div>
+            	</div>
+            	</div>
+	       </div>
+      </div>
+    </div>
+    <!-- End Page -->
+	<!-- Modal -->
+     <div class="modal fade modal-warning" id="exampleModalWarning2" aria-hidden="true"
+       aria-labelledby="exampleModalWarning2" role="dialog" tabindex="-1">
+       <div class="modal-dialog">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">×</span>
+             </button>
+             <h4 class="modal-title"> ยืนยันข้อมูล   </h4>
+           </div>
+           <div class="modal-body">
+             <h4 class="example-title" >  </h4>
+             <p name="messageConfirm2"></p>
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-default" data-dismiss="modal" id="closed2Btn" >Close</button>
+             <button type="button" class="btn btn-primary" id="validate2Btn">Save changes</button>
+           </div>
+         </div>
+       </div>
+     </div>
+     <!-- End Modal -->
+     
+     <!-- Modal -->
+     <div class="modal fade modal-warning" id="exampleModalWarning3" aria-hidden="true"
+       aria-labelledby="exampleModalWarning3" role="dialog" tabindex="-1">
+       <div class="modal-dialog">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">×</span>
+             </button>
+             <h4 class="modal-title"> ยืนยันข้อมูล </h4>
+           </div>
+           <div class="modal-body">
+             <p name="messageConfirm3"></p>
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-default" data-dismiss="modal" id="closed3Btn" >Close</button>
+             <button type="button" class="btn btn-primary" id="validate3Btn">Save changes</button>
+           </div>
+         </div>
+       </div>
+     </div>
+     <!-- End Modal -->
+
+    <!-- Footer -->
+     <div th:replace="fragments/template :: footer-js"> </div>
+     
+    <script>
+      (function(document, window, $){
+        'use strict';
+    
+        var Site = window.Site;
+        $(document).ready(function(){
+          Site.run();
+        });
+      })(document, window, jQuery);
+    </script>
+    
+  </body>
+</html>

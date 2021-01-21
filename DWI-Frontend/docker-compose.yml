@@ -1,0 +1,181 @@
+version: '3.7'
+services:
+    rabbitmq:
+      image: rabbitmq:3-management
+      ports:
+        - "5672:5672"
+        - "15672:15672"
+      networks:
+        - dwi-ntw
+        
+    zipkin:
+      image: openzipkin/zipkin
+      container_name: zipkin
+      environment:
+         STORAGE_TYPE: mem
+         RABBIT_URL: amqp://guest:guest@rabbitmq:5672
+         JAVA_OPTS: -Dlogging.level.zipkin2=DEBUG -Dlogging.level.zipkin=DEBUG
+         ZIPKIN_LOG_LEVEL: DEBUG
+      ports:
+        - "9411:9411"
+      depends_on:
+        - rabbitmq
+      networks:
+        - dwi-ntw
+        
+    mysql:
+      image: mysql:latest
+      ports: 
+        - "3306:3306"
+      networks:
+        - dwi-ntw
+      depends_on:
+        - rabbitmq
+        - zipkin
+      environment:
+        MYSQL_ROOT_PASSWORD: tosaporn
+        MYSQL_DATABASE: IVRDB
+        MYSQL_USER: ivrad
+        MYSQL_PASSWORD: tosaporn
+      volumes:
+        - mysql-dwi:/var/lib/mysql
+    
+    naming-server:
+      image: tosaporn/netflix-eureka-naming-server:0.0.2-SNAPSHOT
+      ports:
+          - "8761:8761"
+      restart: always
+      depends_on:
+        - rabbitmq
+        - zipkin
+        - mysql
+      networks:
+          - dwi-ntw
+    
+    dwi-gateway:
+      image: tosaporn/dwi-gatway:0.0.1-SNAPSHOT
+      ports:
+          - "8999:8999"
+      restart: always
+      environment:
+        NMING_SVR: naming-server
+      depends_on:
+        - rabbitmq
+        - zipkin
+        - mysql
+        - naming-server
+      networks:
+          - dwi-ntw
+          
+    config-server:
+      image: tosaporn/dwi-config-server:0.0.1-SNAPSHOT
+      ports:
+          - "8888:8888"
+      restart: always
+      environment:
+        NMING_SVR: naming-server
+        GIT_CONF_PATH: git@github.com:ponddmj28/spring-cloud-configs.git
+        RB_SRV: rabbitmq
+        RB_PT: 5672
+        RB_USR: guest
+        RB_PSW: guest
+      depends_on:
+        - mysql
+        - rabbitmq
+        - zipkin
+        - naming-server
+        - dwi-gateway
+      networks:
+          - dwi-ntw
+          
+    dwi-ws:
+      image: tosaporn/dwi-backend:0.0.5-SNAPSHOT
+      ports:
+        - "8100:8100"
+      networks:
+        - dwi-ntw
+      environment:
+        DB_HOSTNAME: mysql
+        DB_PORT: 3306
+        DB_NAME: IVRDB
+        DB_USERNAME: ivrad
+        DB_PASSWORD: tosaporn
+        RB_SRV: rabbitmq
+        RB_PT: 5672
+        RB_USR: guest
+        RB_PSW: guest
+        NMING_SVR: naming-server
+        CONF_SRV: config-server
+      depends_on:
+        - mysql
+        - rabbitmq
+        - zipkin
+        - naming-server
+        - config-server
+        - dwi-gateway
+      volumes:
+        - image-dwi:/tmp/images/imagesUpload
+        
+    dwi-wa:
+      image: tosaporn/dwi-frontend:0.0.5-SNAPSHOT
+      ports:
+        - "8080:8080"
+      networks:
+        - dwi-ntw
+      environment:
+        IMAGE_STORE_PATH: /temp/images/imagesUpload
+        RB_SRV: rabbitmq
+        RB_PT: 5672
+        RB_USR: guest
+        RB_PSW: guest
+        NMING_SVR: naming-server
+        CONF_SRV: config-server
+      depends_on:
+        - mysql
+        - dwi-ws
+        - rabbitmq
+        - zipkin
+        - naming-server
+        - config-server
+        - dwi-gateway
+      volumes:
+        - image-dwi:/tmp/images/
+    
+    dwi-bt:
+      image: tosaporn/dwi-batch:0.0.5-SNAPSHOT
+      ports:
+        - "8200:8200"
+      networks:
+        - dwi-ntw
+      environment:
+        DB_HOSTNAME: mysql
+        DB_PORT: 3306
+        DB_NAME: IVRDB
+        DB_USERNAME: ivrad
+        DB_PASSWORD: tosaporn
+        TMP_OUTPUT_PATH: /tmp/batch/files
+        SMPL_SCHD_VL: 0 0 0/1 * * ?
+        RB_SRV: rabbitmq
+        RB_PT: 5672
+        RB_USR: guest
+        RB_PSW: guest
+        NMING_SVR: naming-server
+        CONF_SRV: config-server
+      depends_on:
+        - mysql
+        - dwi-ws
+        - rabbitmq
+        - zipkin
+        - naming-server
+        - config-server
+        - dwi-gateway
+      volumes:
+        - tmp_output_bt:/tmp/batch/files
+        
+networks:
+  dwi-ntw:
+  
+volumes:
+  mysql-dwi:
+  image-dwi:
+  tmp_output_bt:

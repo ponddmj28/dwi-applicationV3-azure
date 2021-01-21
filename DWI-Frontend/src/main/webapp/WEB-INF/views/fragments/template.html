@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+	<div th:fragment="header-css">
+	        <meta charset="utf-8"/>
+		    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui"/>
+		    <meta name="description" content="bootstrap admin template"/>
+		    <meta name="author" content=""/>
+		    
+		    
+		    <link rel="apple-touch-icon" th:href="@{/resources/assets/images/apple-touch-icon.png}"/>
+		    <link rel="shortcut icon" th:href="@{/resources/assets/images/favicon.ico}"/>
+		    
+		    <!-- Stylesheets -->
+		    <link rel="stylesheet" th:href="@{/resources/global/css/bootstrap.min.css}"/>
+		    <link rel="stylesheet" th:href="@{/resources/global/css/bootstrap-extend.min.css}"/>
+		    <link rel="stylesheet" th:href="@{/resources/assets/css/site.min.css}"/>
+		    
+		    <!-- Plugins -->
+		    <link rel="stylesheet" th:href="@{/resources/global/vendor/animsition/animsition.css}"/>
+		    <link rel="stylesheet" th:href="@{/resources/global/vendor/asscrollable/asScrollable.css}"/>
+		    <link rel="stylesheet" th:href="@{/resources/global/vendor/switchery/switchery.css}"/>
+		    <link rel="stylesheet" th:href="@{/resources/global/vendor/intro-js/introjs.css}"/>
+		    <link rel="stylesheet" th:href="@{/resources/global/vendor/slidepanel/slidePanel.css}"/>
+		    <link rel="stylesheet" th:href="@{/resources/global/vendor/flag-icon-css/flag-icon.css}"/>
+		        <!-- <link rel="stylesheet" th:href="@{/resources/global/vendor/chartist/chartist.css}"/>
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css}"/> -->
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/aspieprogress/asPieProgress.css}"/>
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/jquery-selective/jquery-selective.css}"/>
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/bootstrap-datepicker/bootstrap-datepicker.css}"/>
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/asscrollable/asScrollable.css}"/>
+		        <link rel="stylesheet" th:href="@{/resources/assets/examples/css/structure/navbars.css}" />
+		        <!-- <link rel="stylesheet" th:href="@{/resources/assets/examples/css/dashboard/team.css}"/> -->
+		        <!-- Login Screen -->
+		    	<link rel="stylesheet" th:href="@{/resources/assets/examples/css/pages/login-v3.css}" />
+		    	<link rel="stylesheet" th:href="@{/resources/global/vendor/formvalidation/formValidation.css}" />
+        		<link rel="stylesheet" th:href="@{/resources/assets/examples/css/forms/validation.css}" />
+        		<link rel="stylesheet" th:href="@{/resources/assets/examples/css/structure/alerts.css}"/>
+		    	<!-- Sumbit Order -->
+		    	<link rel="stylesheet" th:href="@{/resources/global/vendor/blueimp-file-upload/jquery.fileupload.css}" />
+        		<link rel="stylesheet" th:href="@{/resources/global/vendor/dropify/dropify.css}" />
+        		<link rel="stylesheet" th:href="@{/resources/global/vendor/bootstrap-datepicker/bootstrap-datepicker.css}" />
+        		<link rel="stylesheet" th:href="@{/resources/global/vendor/magnific-popup/magnific-popup.css}"/>
+        		<link rel="stylesheet" th:href="@{/resources/assets/examples/css/pages/gallery.css}"/>
+        		<!-- List Order -->
+        		<link rel="stylesheet" th:href="@{/resources/global/vendor/datatables.net-bs4/dataTables.bootstrap4.css}" />
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/datatables.net-fixedheader-bs4/dataTables.fixedheader.bootstrap4.css}" />
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/datatables.net-fixedcolumns-bs4/dataTables.fixedcolumns.bootstrap4.css}" />
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/datatables.net-rowgroup-bs4/dataTables.rowgroup.bootstrap4.css}" />
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/datatables.net-scroller-bs4/dataTables.scroller.bootstrap4.css}" />
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/datatables.net-select-bs4/dataTables.select.bootstrap4.css}" />
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/datatables.net-responsive-bs4/dataTables.responsive.bootstrap4.css}" />
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/datatables.net-buttons-bs4/dataTables.buttons.bootstrap4.css}" />
+		        <link rel="stylesheet" th:href="@{/resources/assets/examples/css/tables/datatable.css}" />
+		        <link rel="stylesheet" th:href="@{/resources/global/vendor/bootstrap-select/bootstrap-select.css}" />
+        		<!-- UPDATED Order -->
+        		<link rel="stylesheet" th:href="@{/resources/assets/examples/css/uikit/modals.css}" />
+		    <!-- Fonts -->
+		    <link rel="stylesheet" th:href="@{/resources/global/fonts/web-icons/web-icons.min.css}"/>
+		    <link rel="stylesheet" th:href="@{/resources/global/fonts/brand-icons/brand-icons.min.css}"/>
+		    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'/>
+		    
+		    <!--[if lt IE 9]>
+		    <script th:src="@{/resources/global/vendor/html5shiv/html5shiv.min.js}"></script>
+		    <![endif]-->
+		    
+		    <!--[if lt IE 10]>
+		    <script th:src="@{/resources/global/vendor/media-match/media.match.min.js}"></script>
+		    <script th:src="@{/resources/global/vendor/respond/respond.min.js}"></script>
+		    <![endif]-->
+		    
+		    <!-- Scripts -->
+		    <script th:src="@{/resources/global/vendor/breakpoints/breakpoints.js}"></script>
+		    <script>
+		      Breakpoints();
+		    </script>
+	</div>
+</head>
+<body>
+	<div th:fragment="header">
+		 <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega navbar-inverse"
+	      role="navigation">
+	    
+	      <div class="navbar-header">
+	        <button type="button" class="navbar-toggler hamburger hamburger-close navbar-toggler-left hided"
+	          data-toggle="menubar">
+	          <span class="sr-only">Toggle navigation</span>
+	          <span class="hamburger-bar"></span>
+	        </button>
+	        <button type="button" class="navbar-toggler collapsed" data-target="#site-navbar-collapse"
+	          data-toggle="collapse">
+	          <i class="icon wb-more-horizontal" aria-hidden="true"></i>
+	        </button>
+	        <a class="navbar-brand navbar-brand-center" th:href="@{/index}">
+	          <img class="navbar-brand-logo navbar-brand-logo-normal" th:src="@{/resources/assets/images/logo.png}"
+	            title="Remark" />
+	          <img class="navbar-brand-logo navbar-brand-logo-special" th:src="@{/resources/assets/images/logo-colored.png}"
+	            title="Remark" />
+	          <span class="navbar-brand-text hidden-xs-down"> Order Installing Management </span>
+	        </a>
+	      </div>
+	      <div class="navbar-container container-fluid">
+	        <!-- Navbar Collapse -->
+	        <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
+		        <a class="btn btn-warning navbar-text navbar-right navbar-btn" th:href="@{/logout}" >Sign out</a>
+		        <p class="navbar-text navbar-right" th:text="|Signed in as ${#authentication.principal.firstName} ${#authentication.principal.lastName}|"> 
+		        </p> 
+	        </div>
+	        <!-- End Navbar Collapse -->
+	    
+	      </div>
+	    </nav>    
+	    <div class="site-menubar site-menubar-light">
+	      <div class="site-menubar-body">
+	        <div>
+	          <div>
+	            <ul class="site-menu" data-plugin="menu">
+	              <li class="site-menu-category">Sale Tools</li>
+	              <li class="site-menu-item has-sub">
+	                <a href="javascript:void(0)" data-dropdown-toggle="false">
+	                  <i class="site-menu-icon wb-layout" aria-hidden="true"></i>
+	                  <span class="site-menu-title">Menu</span>
+	                  <span class="site-menu-arrow"></span>
+	                </a>
+	                <ul class="site-menu-sub">
+	                  <li class="site-menu-item" th:if="${#authentication.principal.roleCode} != 'ADMIN_SALES'">
+	                    <a class="animsition-link" th:href="@{/applyOrder}">
+	                      <span class="site-menu-title">ApplyOrder</span>
+	                    </a>
+	                  </li>
+	                  <li class="site-menu-item">
+	                    <a class="animsition-link" th:href="@{/listOrders}">
+	                      <span class="site-menu-title">Listing Order</span>
+	                    </a>
+	                  </li>
+	                </ul>
+	              </li>
+	            </ul>      
+	            </div>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+	<div th:fragment="footer-js">
+			<footer class="site-footer">
+      <div class="site-footer-legal">© 2018 <a href="http://themeforest.net/item/remark-responsive-bootstrap-admin-template/11989202">Remark</a></div>
+      <div class="site-footer-right">
+        Crafted with <i class="red-600 wb wb-heart"></i> by <a href="https://themeforest.net/user/creation-studio">Creatiive Studio</a>
+      </div>
+    </footer>
+    <!-- Core  -->
+    <script th:src="@{/resources/global/vendor/babel-external-helpers/babel-external-helpers.js}"></script>
+    <script th:src="@{/resources/global/vendor/jquery/jquery.js}"></script>
+    <script th:src="@{/resources/global/vendor/popper-js/umd/popper.min.js}"></script>
+    <script th:src="@{/resources/global/vendor/bootstrap/bootstrap.js}"></script>
+    <script th:src="@{/resources/global/vendor/animsition/animsition.js}"></script>
+    <script th:src="@{/resources/global/vendor/mousewheel/jquery.mousewheel.js}"></script>
+    <script th:src="@{/resources/global/vendor/asscrollbar/jquery-asScrollbar.js}"></script>
+    <script th:src="@{/resources/global/vendor/asscrollable/jquery-asScrollable.js}"></script>
+    
+    <!-- Plugins -->
+    <script th:src="@{/resources/global/vendor/switchery/switchery.js}"></script>
+    <script th:src="@{/resources/global/vendor/intro-js/intro.js}"></script>
+    <script th:src="@{/resources/global/vendor/screenfull/screenfull.js}"></script>
+    <script th:src="@{/resources/global/vendor/slidepanel/jquery-slidePanel.js}"></script>
+        <!-- <script th:src="@{/resources/global/vendor/chartist/chartist.js}"></script> -->
+        <!-- <script th:src="@{/resources/global/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.js}"></script> -->
+        <script th:src="@{/resources/global/vendor/aspieprogress/jquery-asPieProgress.js}"></script>
+        <script th:src="@{/resources/global/vendor/matchheight/jquery.matchHeight-min.js}"></script>
+        <script th:src="@{/resources/global/vendor/jquery-selective/jquery-selective.min.js}"></script>
+        <script th:src="@{/resources/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js}"></script>
+        <!-- Login Screen -->
+    	<script th:src="@{/resources/global/vendor/formvalidation/formValidation.min.js}"></script>
+        <script th:src="@{/resources/global/vendor/formvalidation/framework/bootstrap4.min.js}"></script>
+        <script th:src="@{/resources/global/vendor/isotope/isotope.pkgd.min.js}"></script>
+        <script th:src="@{/resources/global/vendor/magnific-popup/jquery.magnific-popup.min.js}"></script>
+        
+        <!-- Order Sumbit -->
+        <script th:src="@{/resources/global/vendor/jquery-ui/jquery-ui.js}"></script>
+        <script th:src="@{/resources/global/vendor/blueimp-tmpl/tmpl.js}"></script>
+        <script th:src="@{/resources/global/vendor/blueimp-canvas-to-blob/canvas-to-blob.js}"></script>
+        <script th:src="@{/resources/global/vendor/blueimp-load-image/load-image.all.min.js}"></script>
+        <script th:src="@{/resources/global/vendor/blueimp-file-upload/jquery.fileupload.js}"></script>
+        <script th:src="@{/resources/global/vendor/blueimp-file-upload/jquery.fileupload-process.js}"></script>
+        <script th:src="@{/resources/global/vendor/blueimp-file-upload/jquery.fileupload-image.js}"></script>
+        <script th:src="@{/resources/global/vendor/blueimp-file-upload/jquery.fileupload-audio.js}"></script>
+        <script th:src="@{/resources/global/vendor/blueimp-file-upload/jquery.fileupload-video.js}"></script>
+        <script th:src="@{/resources/global/vendor/blueimp-file-upload/jquery.fileupload-validate.js}"></script>
+        <script th:src="@{/resources/global/vendor/blueimp-file-upload/jquery.fileupload-ui.js}"></script>
+        <script th:src="@{/resources/global/vendor/dropify/dropify.min.js}"></script>
+        <script th:src="@{/resources/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js}"></script>
+        
+        <!-- List Order -->
+        <script th:src="@{/resources/global/vendor/datatables.net/jquery.dataTables.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-fixedheader/dataTables.fixedHeader.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-fixedcolumns/dataTables.fixedColumns.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-rowgroup/dataTables.rowGroup.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-scroller/dataTables.scroller.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-responsive/dataTables.responsive.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-buttons/dataTables.buttons.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-buttons/buttons.html5.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-buttons/buttons.flash.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-buttons/buttons.print.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-buttons/buttons.colVis.js}"></script>
+        <script th:src="@{/resources/global/vendor/datatables.net-buttons-bs4/buttons.bootstrap4.js}"></script>
+        <script th:src="@{/resources/global/vendor/asrange/jquery-asRange.min.js}"></script>
+        <script th:src="@{/resources/global/vendor/bootbox/bootbox.js}"></script>
+        <script th:src="@{/resources/global/vendor/bootstrap-select/bootstrap-select.js}"></script>
+        
+    <!-- Scripts -->
+    <script th:src="@{/resources/global/js/Component.js}"></script>
+    <script th:src="@{/resources/global/js/Plugin.js}"></script>
+    <script th:src="@{/resources/global/js/Base.js}"></script>
+    <script th:src="@{/resources/global/js/Config.js}"></script>
+    
+    <script th:src="@{/resources/assets/js/Section/Menubar.js}"></script>
+    <script th:src="@{/resources/assets/js/Section/Sidebar.js}"></script>
+    <script th:src="@{/resources/assets/js/Section/PageAside.js}"></script>
+    <script th:src="@{/resources/assets/js/Plugin/menu.js}"></script>
+    
+    <!-- Config -->
+    <script th:src="@{/resources/global/js/config/colors.js}"></script>
+    <script th:src="@{/resources/assets/js/config/tour.js}"></script>
+    <script>Config.set('assets', '/resources/assets');</script>
+    
+    <!-- Page -->
+    <script th:src="@{/resources/assets/js/Site.js}"></script>
+    <script th:src="@{/resources/global/js/Plugin/asscrollable.js}"></script>
+    <script th:src="@{/resources/global/js/Plugin/slidepanel.js}"></script>
+    <script th:src="@{/resources/global/js/Plugin/switchery.js}"></script>
+        <script th:src="@{/resources/global/js/Plugin/matchheight.js}"></script>
+        <script th:src="@{/resources/global/js/Plugin/aspieprogress.js}"></script>
+        <script th:src="@{/resources/global/js/Plugin/bootstrap-datepicker.js}"></script>
+        <script th:src="@{/resources/global/js/Plugin/asscrollable.js}"></script>
+        <!-- <script th:src="@{/resources/assets/examples/js/dashboard/team.js}"></script> -->
+        
+        <script th:src="@{/resources/global/js/Plugin/jquery-placeholder.js}"></script>
+        <script th:src="@{/resources/global/js/Plugin/material.js}"></script>
+    	 <!-- Login Screen -->
+    	 <!-- <script th:src="@{/resources/assets/examples/js/forms/validation.js}"></script> -->
+    	<!-- Order Sumbit -->
+    	<script th:src="@{/resources/global/js/Plugin/dropify.js}"></script>
+        <script th:src="@{/resources/assets/examples/js/forms/uploads.js}"></script>
+        <script th:src="@{/resources/global/js/Plugin/bootstrap-datepicker.js}"></script>
+        <script th:src="@{/resources/app/js/registerOrder.js}"></script>
+        <script th:src="@{/resources/global/js/Plugin/filterable.js}"></script>
+        <script th:src="@{/resources/assets/examples/js/pages/gallery.js}"></script>
+        <script th:src="@{/resources/global/js/Plugin/datatables.js}"></script>
+        <script th:src="@{/resources/assets/examples/js/tables/datatable.js}"></script>
+	</div>
+</body>
+</html>

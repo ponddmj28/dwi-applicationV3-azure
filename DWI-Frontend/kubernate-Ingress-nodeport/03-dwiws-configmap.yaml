@@ -1,0 +1,15 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    DB_HOSTNAME: mysql
+    DB_NAME: IVRDB
+    DB_PASSWORD: tosaporn
+    DB_PORT: "3306"
+    DB_USERNAME: ivrad
+  kind: ConfigMap
+  metadata:
+    name: dwiws-cfgmap
+    namespace: default
+kind: List
+
