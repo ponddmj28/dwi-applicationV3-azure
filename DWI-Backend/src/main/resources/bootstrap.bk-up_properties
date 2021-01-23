@@ -1,0 +1,3 @@
+spring.cloud.config.uri=http://${CONF_SRV:localhost}:8888/dwi-configs
+
+

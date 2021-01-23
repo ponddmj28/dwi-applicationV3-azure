@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: dwi-ws
+  name: dwi-ws
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: dwi-ws
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: dwi-ws
+    spec:
+      containers:
+      - env:
+        - name: CONF_SRV
+          value: config-server
+        - name: DB_HOSTNAME
+          value: mysql
+        - name: DB_NAME
+          value: IVRDB
+        - name: DB_PASSWORD
+          value: tosaporn
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_USERNAME
+          value: ivrad
+        - name: NMING_SVR
+          value: naming-server
+        - name: RB_PSW
+          value: guest
+        - name: RB_PT
+          value: "5672"
+        - name: RB_SRV
+          value: rabbitmq
+        - name: RB_USR
+          value: guest
+        image: tosaporn/dwi-backend:0.0.6-SNAPSHOT
+        imagePullPolicy: Always
+        name: dwi-ws
+        volumeMounts:
+        - mountPath: /tmp/images/imagesUpload
+          name: image-dwi
+      restartPolicy: Always
+      volumes:
+      - name: image-dwi
+        persistentVolumeClaim:
+          claimName: image-dwi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: dwi-ws
+  name: dwi-ws
+spec:
+  ports:
+  - port: 8100
+    targetPort: 8100
+    protocol: TCP
+  selector:
+    io.kompose.service: dwi-ws
+  sessionAffinity: None #CHANGE
+  type: NodePort

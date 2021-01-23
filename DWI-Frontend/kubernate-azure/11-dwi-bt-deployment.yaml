@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: dwi-bt
+  name: dwi-bt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: dwi-bt
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: dwi-bt
+    spec:
+      containers:
+      - env:
+        - name: CONF_SRV
+          value: config-server
+        - name: DB_HOSTNAME
+          value: mysql
+        - name: DB_NAME
+          value: IVRDB
+        - name: DB_PASSWORD
+          value: tosaporn
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_USERNAME
+          value: ivrad
+        - name: NMING_SVR
+          value: naming-server
+        - name: RB_PSW
+          value: guest
+        - name: RB_PT
+          value: "5672"
+        - name: RB_SRV
+          value: rabbitmq
+        - name: RB_USR
+          value: guest
+        - name: SMPL_SCHD_VL
+          value: 0 0 0/1 * * ?
+        - name: TMP_OUTPUT_PATH
+          value: /tmp/batch/files
+        image: tosaporn/dwi-batch:0.0.6-SNAPSHOT
+        name: dwi-bt
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /tmp/batch/files
+          name: tmp-output-bt
+      restartPolicy: Always
+      volumes:
+      - name: tmp-output-bt
+        persistentVolumeClaim:
+          claimName: tmp-output-bt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: dwi-bt
+  name: dwi-bt
+spec:
+  ports:
+  - port: 8200
+    targetPort: 8200
+    protocol: TCP
+  selector:
+    io.kompose.service: dwi-bt
+  sessionAffinity: None #CHANGE
+  type: NodePort
+
+

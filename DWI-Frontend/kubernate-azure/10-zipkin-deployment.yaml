@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: zipkin
+  name: zipkin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: zipkin
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: zipkin
+    spec:
+      containers:
+      - env:
+        - name: JAVA_OPTS
+          value: -Dlogging.level.zipkin2=DEBUG -Dlogging.level.zipkin=DEBUG
+        - name: RABBIT_URL
+          value: amqp://guest:guest@rabbitmq:5672
+        - name: STORAGE_TYPE
+          value: mem
+        - name: ZIPKIN_LOG_LEVEL
+          value: DEBUG
+        image: openzipkin/zipkin
+        name: zipkin
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: zipkin
+  name: zipkin
+spec:
+  ports:
+  - port: 9411
+    targetPort: 9411
+    protocol: TCP
+  selector:
+    io.kompose.service: zipkin
+  sessionAffinity: None #CHANGE
+  type: NodePort

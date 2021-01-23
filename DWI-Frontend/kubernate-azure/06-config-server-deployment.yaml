@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: config-server
+  name: config-server
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      io.kompose.service: config-server
+  template:
+    metadata:
+      labels:
+        io.kompose.service: config-server
+    spec:
+      containers:
+      - env:
+        - name: GIT_CONF_PATH
+          value: git@github.com:ponddmj28/spring-cloud-configs.git
+        - name: NMING_SVR
+          value: naming-server
+        - name: RB_PSW
+          value: guest
+        - name: RB_PT
+          value: "5672"
+        - name: RB_SRV
+          value: rabbitmq
+        - name: RB_USR
+          value: guest
+        image: tosaporn/dwi-config-server:0.0.2-SNAPSHOT
+        name: config-server
+        imagePullPolicy: Always
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: config-server
+  name: config-server
+spec:
+  ports:
+  - port: 8888
+    targetPort: 8888
+    protocol: TCP
+  selector:
+    io.kompose.service: config-server
+  sessionAffinity: None #CHANGE
+  type: NodePort

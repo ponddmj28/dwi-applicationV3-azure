@@ -2,7 +2,6 @@ package th.co.acc.dwi.service;
 
 import java.util.List;
 
-import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +19,12 @@ import th.co.acc.dwi.model.UserInfo;
 import th.co.acc.dwi.model.WorkOrder;
 
 //@FeignClient(name = "order-service", url = "${DWI_WS_URL:http://localhost:8100/dwi-ws}")
-@RibbonClient(name="dwi-ws")
 //@FeignClient(name="dwi-ws",contextId="order-service", configuration = HeaderInterceptor.class)
-@FeignClient(name="dwi-gtwy",contextId="order-service", configuration = HeaderInterceptor.class,path="/dwi-ws")
+//@RibbonClient(name="dwi-ws")
+//@FeignClient(name="dwi-gtwy",contextId="order-service", configuration = HeaderInterceptor.class,path="/dwi-ws")
+
+//@FeignClient(name="dwi-ws",contextId="order-service", configuration = HeaderInterceptor.class)
+@FeignClient(name = "dwi-gtwy", configuration = HeaderInterceptor.class,path="/dwi-ws")
 public interface OrderService  {
 	
 	@RequestMapping(method = RequestMethod.POST, value ="/submitOrder" )

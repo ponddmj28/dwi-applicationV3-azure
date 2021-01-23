@@ -2,7 +2,6 @@ package th.co.acc.dwi.service;
 
 import java.util.List;
 
-import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,9 +13,12 @@ import th.co.acc.dwi.model.OrderList;
 import th.co.acc.dwi.model.WorkOrder;
 
 //@FeignClient(name = "order-service", url = "${DWI_WS_URL:http://localhost:8100/dwi-ws}")
-@RibbonClient(name="dwi-ws")
 //@FeignClient(name="dwi-ws",contextId="order-service", configuration = HeaderInterceptor.class)
-@FeignClient(name="dwi-gtwy",contextId="order-service", configuration = HeaderInterceptor.class,path="/dwi-ws", fallback=WorkOrderServiceFallBack.class)
+//@RibbonClient(name="dwi-ws")
+//@FeignClient(name="dwi-gtwy",contextId="order-service", configuration = HeaderInterceptor.class,path="/dwi-ws", fallback=WorkOrderServiceFallBack.class)
+
+//@FeignClient(name = "dwi-ws", configuration = HeaderInterceptor.class, fallback=WorkOrderServiceFallBack.class)
+@FeignClient(name = "dwi-gtwy", configuration = HeaderInterceptor.class, fallback=WorkOrderServiceFallBack.class,path="/dwi-ws")
 public interface WorkOrderService {
 	
 	@RequestMapping(method = RequestMethod.POST, value ="/listOrders" )

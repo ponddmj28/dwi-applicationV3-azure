@@ -41,7 +41,7 @@ services:
         - mysql-dwi:/var/lib/mysql
     
     naming-server:
-      image: tosaporn/netflix-eureka-naming-server:0.0.2-SNAPSHOT
+      image: tosaporn/netflix-eureka-naming-server:0.0.3-SNAPSHOT
       ports:
           - "8761:8761"
       restart: always
@@ -53,7 +53,7 @@ services:
           - dwi-ntw
     
     dwi-gateway:
-      image: tosaporn/dwi-gatway:0.0.1-SNAPSHOT
+      image: tosaporn/dwi-gtwy-v2:0.0.1-SNAPSHOT
       ports:
           - "8999:8999"
       restart: always
@@ -68,7 +68,7 @@ services:
           - dwi-ntw
           
     config-server:
-      image: tosaporn/dwi-config-server:0.0.1-SNAPSHOT
+      image: tosaporn/dwi-config-server:0.0.2-SNAPSHOT
       ports:
           - "8888:8888"
       restart: always
@@ -89,7 +89,7 @@ services:
           - dwi-ntw
           
     dwi-ws:
-      image: tosaporn/dwi-backend:0.0.5-SNAPSHOT
+      image: tosaporn/dwi-backend:0.0.6-SNAPSHOT
       ports:
         - "8100:8100"
       networks:
@@ -117,7 +117,7 @@ services:
         - image-dwi:/tmp/images/imagesUpload
         
     dwi-wa:
-      image: tosaporn/dwi-frontend:0.0.5-SNAPSHOT
+      image: tosaporn/dwi-frontend:0.0.6-SNAPSHOT
       ports:
         - "8080:8080"
       networks:
@@ -142,7 +142,7 @@ services:
         - image-dwi:/tmp/images/
     
     dwi-bt:
-      image: tosaporn/dwi-batch:0.0.5-SNAPSHOT
+      image: tosaporn/dwi-batch:0.0.6-SNAPSHOT
       ports:
         - "8200:8200"
       networks:

@@ -29,13 +29,16 @@ public class EnvironmentConfigurationLogger {
 		StreamSupport.stream(sources.spliterator(), false).filter(ps -> ps instanceof EnumerablePropertySource)
 				.map(ps -> ((EnumerablePropertySource) ps).getPropertyNames()).flatMap(Arrays::stream).distinct()
 				.forEach(prop -> {
-					Object resolved = environment.getProperty(prop, Object.class);
-					if (resolved instanceof String) {
-						LOGGER.info("{} - {}", prop, environment.getProperty(prop));
-					} else {
-						LOGGER.info("{} - {}", prop, "NON-STRING-VALUE");
+					try {
+						Object resolved = environment.getProperty(prop, Object.class);
+						if (resolved instanceof String) {
+							LOGGER.info("{} - {}", prop, environment.getProperty(prop));
+						} else {
+							LOGGER.info("{} - {}", prop, "NON-STRING-VALUE");
+						}
+					}catch(Exception e) {
+						LOGGER.error("{}",e.getMessage());
 					}
-					
 				});
 		LOGGER.debug("===========================================");
 	}

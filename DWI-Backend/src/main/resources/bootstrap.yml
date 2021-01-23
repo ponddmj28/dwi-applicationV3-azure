@@ -1,0 +1,67 @@
+spring:
+  cloud:
+   config:
+       uri: http://${CONF_SRV:localhost}:8888/dwi-configs
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        sliding-window-type : COUNT_BASED #TIME_BASED
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 2s
+        failure-rate-threshold: 60
+        event-consumer-buffer-size: 10
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 50
+    instances:       dwiws: 
+         sliding-window-size: 60
+         minimum-number-of-calls: 30
+         permitted-number-of-calls-in-half-open-state: 10
+         wait-duration-in-open-state: 1s
+         failure-rate-threshold: 60
+         slow-call-duration-threshold: 3s
+         slow-call-rate-threshold: 50
+  retry:    configs:      default:
+        max-attempts: 2
+        wait-duration: 1s
+    instances:
+       dwiws: 
+        max-attempts: 3
+        wait-duration: 5s
+  ratelimiter:    configs:      default:
+        register-health-indicator: true
+        limit-for-period: 10
+        limit-refresh-period: 1s
+        timeout-duration: 0
+        event-consumer-buffer-size: 10
+    instances:
+       dwiws: 
+        limit-for-period: 20
+        limit-refresh-period: 1s
+        timeout-duration: 5s
+  bulkhead:    configs:      default:
+        max-concurrent-calls: 100
+    instances:
+       dwiws: 
+        max-concurrent-calls: 10
+        max-wait-duration: 5s
+  thread-pool-bulkhead:    configs:      default:
+        core-thread-pool-size: 1
+        max-thread-pool-size: 10
+        queue-capacity: 20
+    instances:
+       dwiws: 
+         core-thread-pool-size: 5
+         max-thread-pool-size: 15
+         queue-capacity: 100
+  timelimiter:    configs:        default:
+          event-consumer-buffer-size: 10
+          cancel-running-future: false
+          timeout-duration: 2s
+    instances:        dwiws: 
+          base-config: default
